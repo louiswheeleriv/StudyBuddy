@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  schedule_type: MyString
+  time_of_day: MyString
+  day_of_week: 1
+
+two:
+  user: two
+  schedule_type: MyString
+  time_of_day: MyString
+  day_of_week: 1

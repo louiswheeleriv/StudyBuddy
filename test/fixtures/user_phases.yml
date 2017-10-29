@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  phase: one
+  user: one
+  start_date: 2017-10-26
+  end_date: 2017-10-26
+
+two:
+  phase: two
+  user: two
+  start_date: 2017-10-26
+  end_date: 2017-10-26

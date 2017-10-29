@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  phase: one
+  hour_offset: 1
+  every_n_days: 1
+  question_text: MyText
+  answer_type: MyString
+
+two:
+  phase: two
+  hour_offset: 1
+  every_n_days: 1
+  question_text: MyText
+  answer_type: MyString

@@ -38,6 +38,7 @@ gem 'bootstrap-sass'
 gem 'bootstrap-datepicker-rails'
 gem 'dotenv-rails'
 gem 'jquery-rails'
+gem 'pg'
 gem 'pry'
 gem 'rest-client'
 

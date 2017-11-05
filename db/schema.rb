@@ -10,15 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171027005908) do
+ActiveRecord::Schema.define(version: 20171105002037) do
 
   create_table "phases", force: :cascade do |t|
     t.integer "study_id"
     t.string "name"
-    t.integer "prev_phase_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prev_phase_id"], name: "index_phases_on_prev_phase_id"
+    t.integer "phase_index"
     t.index ["study_id"], name: "index_phases_on_study_id"
   end
 
@@ -79,10 +78,10 @@ ActiveRecord::Schema.define(version: 20171027005908) do
     t.boolean "is_admin"
     t.string "participant_number"
     t.boolean "participant_active"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "username"
-    t.string "password"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "username", null: false
+    t.string "password_digest"
     t.string "email"
     t.string "phone"
     t.string "timezone"

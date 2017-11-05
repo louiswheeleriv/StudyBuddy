@@ -1,0 +1,50 @@
+<h1>New User</h1>
+<div class="row" id="form-signup">
+  <div class="col-md-6 col-md-offset-3">
+
+		<h3>Study Selection</h3>
+		<div class="well">
+			<select id="select-study" class="form-control">
+				<% @studies.each do |study| %>
+					<option value="<%= study.id %>"><%= study.name %></option>
+				<% end %>
+				<option value="admin">Admin</option>
+			</select>
+			<p id="msg-select-study">
+				<b>Start Date:</b> <span id="study-start"><%= @study.start_date %></span><br/>
+				<b>End Date:</b> <span id="study-end"><%= @study.end_date %></span>
+			</p>
+		</div>
+
+		<div id="section-user">
+			<h3>User Info</h3>
+			<p id="msg-user" class="err"/>
+			<%= render 'shared/user_info', locals: {
+				user: @user,
+				exclude: {},
+				include_phone_test: true
+			} %>
+		</div>
+
+		<div id="section-schedule">
+			<h3>Schedule Info</h3>
+			<p id="msg-schedule" class="err"/>
+			<%= render 'shared/user_scheduler' %>
+		</div>
+
+		<div id="section-phase-dates">
+			<h3>Phase Dates</h3>
+			<p id="msg-phases" class="err"/>
+			<div id="phase-edit">
+				<%= render 'shared/user_phase_edit', locals: { phases: @phases } %>
+			</div>
+		</div>
+
+		<p id="msg-bottom" class="err"/>
+		<div id="btn-submit-container">
+			<button onclick="submitSignUp(); return false;" class="btn btn-primary" id="btn-sign-up">Sign Up</button>
+			<button class="btn btn-primary disabled" id="btn-sign-up-disabled">Processing...</button>
+		</div>
+  </div>
+	<%= javascript_include_tag('admin/signup.js') %>
+</div>

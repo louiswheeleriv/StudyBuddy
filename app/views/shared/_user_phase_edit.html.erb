@@ -1,0 +1,15 @@
+<div class="well user-phase-edit">
+	<div id="phase-listing">
+		<% (@phases ? @phases : locals[:phases]).each do |phase| %>
+			<div class="phase phase-<%= phase.id %>">
+				<h4><%= phase.name %></h4>
+				<div class="input-daterange input-group">
+					<input type="text" class="input-sm form-control datepicker" name="start" />
+					<span class="input-group-addon">to</span>
+					<input type="text" class="input-sm form-control datepicker" name="end" />
+				</div>
+			</div>
+		<% end %>
+	</div>
+	<%= javascript_include_tag('user_phase_edit.js') %>
+</div>

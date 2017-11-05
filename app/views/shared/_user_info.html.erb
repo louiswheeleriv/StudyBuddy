@@ -1,0 +1,53 @@
+<div id="user-info">
+	<% user = locals[:user] %>
+	<% exclude = locals[:exclude] || {} %>
+	<div class="well">
+		<% unless exclude['first_name'] %>
+			<b>First Name</b>
+			<input id="user_first_name" value="<%= user&.first_name %>" class="form-control"/>
+		<% end %>
+
+		<% unless exclude['last_name'] %>
+			<b>Last Name</b>
+			<input id="user_last_name" value="<%= user&.last_name %>" class="form-control"/>
+		<% end %>
+
+		<% unless exclude['participant_number'] %>
+			<b>Participant Number</b>
+			<input id="user_participant_number" value="<%= user&.participant_number %>" class="form-control"/>
+		<% end %>
+
+		<% unless exclude['email'] %>
+			<b>Email</b>
+			<input id="user_email" type="email" value="<%= user&.email %>" class="form-control"/>
+		<% end %>
+
+		<% unless exclude['password'] %>
+			<b>Password</b>
+			<input id="user_password" type="password" class="form-control"/>
+		<% end %>
+
+		<% unless exclude['password_confirmation'] %>
+			<b>Confirm Password</b>
+			<input id="user_password_confirmation" type="password" class="form-control"/>
+			<p id="pw-match">Passwords match</p>
+			<p id="pw-no-match">Passwords do not match</p>
+			<p id="pw-min-length">Password must be at least 6 characters</p>
+		<% end %>
+
+		<% unless exclude['timezone'] %>
+			<b>Timezone</b>
+			<%= render 'shared/timezone_select', locals: { selected: user&.timezone } %>
+		<% end %>
+
+		<% unless exclude['phone'] %>
+			<b>Phone</b>
+			<input id="user_phone" type="tel" value="<%= user&.phone %>" class="form-control"/>
+			<% if locals[:include_phone_test] %>
+				<button onclick="testSms(); return false;" class="btn btn-primary">Test SMS</button>
+				<span id="msg-test-sms"></span>
+			<% end %>
+		<% end %>
+	</div>
+	<%= javascript_include_tag('user_info.js') %>
+</div>

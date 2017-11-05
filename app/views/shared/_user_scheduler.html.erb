@@ -1,0 +1,37 @@
+<div class="schedules well">
+	<div class="schedule schedule-wake">
+		<%= render 'shared/schedule_header', locals: { title: 'Wake Up Times' } %>
+		<%= render 'shared/schedule_row' %>
+		<div class="row">
+			<button class="btn btn-primary btn-add-time" onclick="addTime(this); return false;">
+				<i class="fa fa-plus"></i> Add Time
+			</button>
+		</div>
+	</div>
+	<div class="schedule schedule-sleep">
+		<%= render 'shared/schedule_header', locals: { title: 'Sleep Times' } %>
+		<%= render 'shared/schedule_row' %>
+		<div class="row">
+			<button class="btn btn-primary btn-add-time" onclick="addTime(this); return false;">
+				<i class="fa fa-plus"></i> Add Time
+			</button>
+		</div>
+	</div>
+	<%= javascript_include_tag('user_scheduler.js') %>
+	<script>
+		function addTime(elem) {
+			var parent = $(elem).closest('div.schedule');
+			var scheduleRows = parent.children('div.schedule-row');
+			insertAtIndex(
+				parent,
+				scheduleRows.length,
+				"<%= escape_javascript("#{render :partial => 'shared/schedule_row'}").html_safe %>"
+			);
+		}
+	</script>
+	<style>
+		div.schedule-wake {
+			margin-bottom: 20px;
+		}
+	</style>
+</div>

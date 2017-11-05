@@ -1,0 +1,133 @@
+// Place all the styles related to the Admin controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+div#admin-page {
+	text-align: center;
+
+	div#admin-links {
+
+		& > table {
+			max-width: 300px;
+			margin: auto;
+			border: solid 1px gray;
+		}
+	}
+}
+
+div#form-signup {
+
+	input, textarea, select, .uneditable-input {
+	  border: 1px solid #bbb;
+	  width: 100%;
+	  margin-bottom: 15px;
+	}
+
+	.err {
+		display: none;
+		color: red;
+	}
+
+	#msg-bottom {
+		text-align: center;
+	}
+
+	div.input-daterange {
+		max-width: 400px;
+
+		input[type="text"] {
+			margin: 0 !important;
+			font-size: medium;
+		}
+	}
+
+	input {
+	  height: auto !important;
+	}
+
+	// #error_explanation {
+	//   color: red;
+	//   ul {
+	//     color: red;
+	//     margin: 0 0 30px 0;
+	//   }
+	// }
+	//
+	// .field_with_errors {
+	//   .form-control {
+	//     color: red;
+	//   }
+	// }
+
+	p#pw-match {
+		color: green;
+		display: none;
+	}
+
+	p#pw-no-match, p#pw-min-length {
+		color: red;
+		display: none;
+	}
+
+	div.schedules {
+		& > div.schedule {
+
+			& > div.row {
+				div.col-time {
+					select {
+						display: inline;
+						width: 60px;
+					}
+				}
+
+				div.col-day {
+					text-align: center;
+					vertical-align: middle;
+
+					input[type="checkbox"] {
+						width: 18px;
+					}
+				}
+			}
+
+			& > div.schedule-row {
+				i.fa-times {
+					color: red;
+					cursor: pointer;
+				}
+			}
+
+			div.schedule-row:nth-child(2) > div.col-remove {
+				i.fa-times {
+					display: none;
+				}
+			}
+
+			.btn-add-time {
+				width: 120px;
+				margin-left: 15px;
+			}
+		}
+	}
+
+	div.user-phase-edit {
+		input[data-provide="datepicker"] {
+			width: auto;
+		}
+	}
+
+	div#btn-submit-container {
+		width: 100%;
+		text-align: center;
+		margin-bottom: 100px;
+
+		& > button {
+			width: 100%;
+			max-width: 300px;
+		}
+
+		#btn-sign-up-disabled {
+			display: none;
+		}
+	}
+}

@@ -1,3 +1,9 @@
+$(document).ready(function() {
+	if ($('#select-study').val() == 'admin') {
+		toggleAdmin(true);
+	}
+});
+
 $('#select-study').on('change', function() {
 	var selectedStudyId = $(this).val();
 	if (selectedStudyId == 'admin') {

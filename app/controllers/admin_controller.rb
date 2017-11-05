@@ -15,8 +15,12 @@ class AdminController < ApplicationController
 	def load_studies
 		@study_message = 'Please select a study.'
 		@studies = Study.all
-		@study = @studies.first
-		@phases = Phase.where(study_id: @study.id)
+		if @studies.empty?
+			@study_message = 'No studies found in database.'
+		else
+			@study = @studies.first
+			@phases = Phase.where(study_id: @study.id)
+		end
 	end
 
 	def load_study_phases

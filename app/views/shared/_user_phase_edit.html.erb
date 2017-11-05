@@ -1,6 +1,6 @@
 <div class="well user-phase-edit">
 	<div id="phase-listing">
-		<% (@phases ? @phases : locals[:phases]).each do |phase| %>
+		<% (@phases || locals[:phases] || []).each do |phase| %>
 			<div class="phase phase-<%= phase.id %>">
 				<h4><%= phase.name %></h4>
 				<div class="input-daterange input-group">

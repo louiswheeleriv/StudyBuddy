@@ -11,8 +11,10 @@
 				<option value="admin">Admin</option>
 			</select>
 			<p id="msg-select-study">
-				<b>Start Date:</b> <span id="study-start"><%= @study.start_date %></span><br/>
-				<b>End Date:</b> <span id="study-end"><%= @study.end_date %></span>
+				<% if @study %>
+					<b>Start Date:</b> <span id="study-start"><%= @study.start_date %></span><br/>
+					<b>End Date:</b> <span id="study-end"><%= @study.end_date %></span>
+				<% end %>
 			</p>
 		</div>
 

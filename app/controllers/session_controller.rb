@@ -11,7 +11,7 @@ class SessionController < ApplicationController
       #redirect_to(user)
 			redirect_to('/')
     else
-			@error = 'Invalid email/password combination'
+			@error = 'Invalid username/password combination'
       render 'new'
     end
   end

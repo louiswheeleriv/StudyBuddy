@@ -4,12 +4,12 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="/">Home</a></li>
 				<% if !logged_in? %>
-					<li><a href="login">Log In</a></li>
+					<li><a href="/login">Log In</a></li>
 				<% else %>
 					<% if is_admin? %>
-						<li><a href="admin">Admin</a></li>
+						<li><a href="/admin">Admin</a></li>
 					<% end %>
-					<li><a href="logout">Log Out</a></li>
+					<li><a href="/logout">Log Out</a></li>
 				<% end %>
 			</ul>
 		</nav>

@@ -8,8 +8,11 @@ class SessionController < ApplicationController
 		user = User.find_by(username: params[:session][:username].downcase)
     if user && user.authenticate(params[:session][:password])
 			log_in(user)
-      #redirect_to(user)
-			redirect_to('/')
+			if user.is_admin
+				redirect_to('/admin')
+			else
+				redirect_to('/dashboard')
+			end
     else
 			@error = 'Invalid username/password combination'
       render 'new'
@@ -18,7 +21,7 @@ class SessionController < ApplicationController
 
 	def destroy
     log_out
-    redirect_to(root_url)
+    redirect_to('/login')
   end
 
 end

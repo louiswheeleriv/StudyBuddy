@@ -20,10 +20,12 @@
 
 	#btn-login-container {
 		text-align: center;
+		margin-top: 33px;
 
 		input[type="submit"] {
 			width: 100%;
-			max-width: 200px;
+			max-width: 400px;
+			margin-bottom: 15px;
 		}
 	}
 }

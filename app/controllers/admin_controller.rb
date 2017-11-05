@@ -13,6 +13,16 @@ class AdminController < ApplicationController
 		load_studies
 	end
 
+	def users
+
+	end
+
+	def manage
+
+	end
+
+	private
+
 	def load_studies
 		@study_message = 'Please select a study.'
 		@studies = Study.all

@@ -6,19 +6,16 @@
 @import "bootstrap";
 
 body {
-  padding-top: 60px;
+  padding-top: 75px;
+}
+
+div.jumbotron {
+	border-radius: 5px;
+	text-align: center;
 }
 
 section {
   overflow: auto;
-}
-
-textarea {
-  resize: vertical;
-}
-
-.center {
-  text-align: center;
 }
 
 .center h1 {

@@ -1,17 +1,41 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
-	<div class="container">
+	<div class="container-fluid">
 		<nav>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/">Home</a></li>
-				<% if !logged_in? %>
-					<li><a href="/login">Log In</a></li>
-				<% else %>
-					<% if is_admin? %>
-						<li><a href="/admin">Admin</a></li>
+			<div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-navbar">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="http://www.massgeneral.org/neurology/research/researchlab.aspx?id=1663&display=overview">MGH Global Neurology</a>
+	    </div>
+			<div id="header-navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/">Home</a></li>
+					<% if !logged_in? %>
+						<li><a href="/login">Log In</a></li>
+					<% else %>
+						<% if is_admin? %>
+							<li><a href="/admin">Admin</a></li>
+						<% else %>
+							<li><a href="/dashboard">Dashboard</a></li>
+						<% end %>
+						<li><a href="/logout">Log Out</a></li>
 					<% end %>
-					<li><a href="/logout">Log Out</a></li>
-				<% end %>
-			</ul>
+				</ul>
+			</div>
 		</nav>
 	</div>
+	<script>
+		$(document).ready(function() {
+			$(document).click(function (event) {
+				// Close navbar if it's open and user clicked outside it
+        var clickover = $(event.target);
+        var _opened = $(".navbar-collapse").hasClass("navbar-collapse") && $(".navbar-collapse").hasClass("in");
+        if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+            $("button.navbar-toggle").click();
+        }
+    	});
+		});
+	</script>
 </header>

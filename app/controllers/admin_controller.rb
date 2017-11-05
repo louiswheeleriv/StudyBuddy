@@ -1,5 +1,6 @@
 require './lib/helpers/twilio_helper.rb'
 class AdminController < ApplicationController
+	before_action :assert_admin_user
 
 	TEST_SMS_MESSAGE = 'This is a test text from the MGH Neurological Clinical Research Institute!'.freeze
 	PHASE_DATES_MSG = 'Please provide a start and end date for every phase. Phases must go in order and cannot overlap.'.freeze
@@ -200,5 +201,11 @@ class AdminController < ApplicationController
 			location: location
 		}
 	end
+
+	private
+
+	def assert_admin_user
+    redirect_to(root_url) unless is_admin?
+  end
 
 end

@@ -21,6 +21,27 @@ class AdminController < ApplicationController
 
 	end
 
+	def manage_studies
+	end
+
+	def manage_phases
+	end
+
+	def manage_questions
+	end
+
+	def manage_users
+	end
+
+	def manage_user_schedules
+	end
+
+	def manage_user_phases
+	end
+
+	def manage_user_data
+	end
+
 	private
 
 	def load_studies

@@ -121,3 +121,16 @@ div#signup-page {
 		}
 	}
 }
+
+div#admin-manage-page {
+	text-align: center;
+
+	div#manage-links {
+
+		& > table {
+			max-width: 300px;
+			margin: auto;
+			border: solid 1px gray;
+		}
+	}
+}

@@ -15,6 +15,13 @@ Rails.application.routes.draw do
 	post 'test_sms', to: 'admin#test_sms'
 	get 'admin/users', to: 'admin#users'
 	get 'admin/manage', to: 'admin#manage'
+	get 'admin/manage/studies', to: 'admin#manage_studies'
+	get 'admin/manage/phases', to: 'admin#manage_phases'
+	get 'admin/manage/questions', to: 'admin#manage_questions'
+	get 'admin/manage/users', to: 'admin#manage_users'
+	get 'admin/manage/user_schedules', to: 'admin#manage_user_schedules'
+	get 'admin/manage/user_phases', to: 'admin#manage_user_phases'
+	get 'admin/manage/user_data', to: 'admin#manage_user_data'
 
 	get 'study/:study_id', to: 'study#study', constraints: { study_id: /.*/ }
 end

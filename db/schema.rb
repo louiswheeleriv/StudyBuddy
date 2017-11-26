@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171105002037) do
+ActiveRecord::Schema.define(version: 20171108002921) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "phases", force: :cascade do |t|
     t.integer "study_id"
@@ -74,10 +77,19 @@ ActiveRecord::Schema.define(version: 20171105002037) do
     t.index ["user_id"], name: "index_user_schedules_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.boolean "is_admin"
+  create_table "user_studies", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "study_id"
     t.string "participant_number"
     t.boolean "participant_active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["study_id"], name: "index_user_studies_on_study_id"
+    t.index ["user_id"], name: "index_user_studies_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.boolean "is_admin"
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "username", null: false
@@ -89,4 +101,6 @@ ActiveRecord::Schema.define(version: 20171105002037) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "user_studies", "studies"
+  add_foreign_key "user_studies", "users"
 end

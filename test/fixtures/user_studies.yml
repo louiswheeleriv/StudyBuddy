@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  study: one
+  participant_number: MyString
+  participant_active: false
+
+two:
+  user: two
+  study: two
+  participant_number: MyString
+  participant_active: false

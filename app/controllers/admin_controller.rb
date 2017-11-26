@@ -14,7 +14,30 @@ class AdminController < ApplicationController
 	end
 
 	def users
+		@study_by_id = Study.all.map { |study| [study.id, study] }.to_h
+		@selected_study_id = params['study'] ? params['study'].to_i : nil
 
+		# Collect UserStudy records and their associated Users
+		user_studies_by_user_id = UserStudy.where(
+			study_id: @selected_study_id ? @selected_study_id : @study_by_id.keys
+		).group_by(&:user_id)
+		users = User.where(id: user_studies_by_user_id.keys, is_admin: false)
+
+		# Build array of hashes with row data to be rendered
+		@rows = users.map do |user|
+			user_studies = user_studies_by_user_id[user.id]
+			{
+				id: user.id,
+				participant_numbers: user_studies.map { |user_study|
+					[@study_by_id[user_study.study_id].name, user_study.participant_number]
+				}.to_h,
+				first_name: user.first_name,
+				last_name: user.last_name,
+				is_active: user_studies.map { |user_study|
+					[@study_by_id[user_study.study_id].name, user_study.participant_active]
+				}.to_h
+			}
+		end
 	end
 
 	def manage

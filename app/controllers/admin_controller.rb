@@ -65,8 +65,6 @@ class AdminController < ApplicationController
 	def manage_user_data
 	end
 
-	private
-
 	def load_studies
 		@study_message = 'Please select a study.'
 		@studies = Study.all
@@ -202,6 +200,8 @@ class AdminController < ApplicationController
 		render 'signup'
 	end
 
+	private
+
 	# Check that posted schedule data meets criteria
 	def validate_schedule_data(schedules)
 		return schedules['wake'] && schedules['wake'].keys.length == 7 &&
@@ -255,8 +255,6 @@ class AdminController < ApplicationController
 			location: location
 		}
 	end
-
-	private
 
 	def assert_admin_user
     redirect_to(root_url) unless is_admin?

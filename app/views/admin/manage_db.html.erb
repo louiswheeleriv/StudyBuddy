@@ -1,0 +1,60 @@
+<div id="admin-manage-page">
+	<a class="btn btn-default" href="/admin/manage">
+		Back to Manage
+	</a>
+	<h2 id="page-header">Manage <%= @header_record_type_plural %></h2>
+	<div id="records-container">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Actions</th>
+					<% @headers.each do |header| %>
+						<th><%= header %></th>
+					<% end %>
+				</tr>
+			</thead>
+			<tbody>
+				<% @rows.each do |row| %>
+					<% id = row.find { |c| c[:meta][:column] == 'id' }[:value] %>
+					<tr data-id="<%= id %>">
+						<td class="actions">
+							<i class="fa fa-pencil"></i>
+							<span class="cancel-edit">cancel</span>
+							<i class="fa fa-trash"></i>
+							<span class="cancel-delete">undo deletion</span>
+						</td>
+						<% row.each do |cell| %>
+							<% if cell[:meta][:editable] %>
+								<td data-col="<%= cell[:meta][:column] %>" class="editable">
+									<!-- read only cell -->
+									<div class="col-read">
+										<% if cell[:meta][:type] == :boolean %>
+											<input type="checkbox" disabled <%= cell[:value] == true ? 'checked' : '' %>/>
+										<% else %>
+											<input type="<%= cell[:meta][:type] %>" value="<%= cell[:value] %>" disabled/>
+										<% end %>
+									</div>
+									<!-- editable cell -->
+									<div class="col-edit">
+										<% if cell[:meta][:type] == :boolean %>
+											<input type="checkbox" <%= cell[:value] == true ? 'checked' : '' %>/>
+										<% else %>
+											<input type="<%= cell[:meta][:type] %>" value="<%= cell[:value] %>"/>
+										<% end %>
+									</div>
+								</td>
+							<% else %>
+								<td>
+									<!-- totally uneditable field -->
+									<div class="col-read-only"><%= cell[:value] %></div>
+								</td>
+							<% end %>
+						<% end %>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+		<button id="btn-save-records" class="btn btn-primary disabled">Save Changes</button>
+	</div>
+	<%= javascript_include_tag('admin/manage_db.js') %>
+</div>

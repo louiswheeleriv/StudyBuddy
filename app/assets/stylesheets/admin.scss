@@ -122,7 +122,15 @@ div#signup-page {
 	}
 }
 
-div#admin-manage-page {
+div#admin-users-page {
+	text-align: center;
+
+	div#users-container {
+		text-align: left;
+	}
+}
+
+div#admin-manage-selection-page {
 	text-align: center;
 
 	div#manage-links {
@@ -131,6 +139,44 @@ div#admin-manage-page {
 			max-width: 300px;
 			margin: auto;
 			border: solid 1px gray;
+		}
+	}
+}
+
+div#admin-manage-page {
+
+	h2#page-header {
+		text-align: center;
+	}
+
+	div#records-container {
+
+		i.fa, span.cancel-edit, span.cancel-delete {
+			cursor: pointer;
+		}
+
+		i.fa-pencil, span.cancel-edit {
+			color: dodgerblue;
+		}
+
+		i.fa-trash, span.cancel-delete {
+			color: red;
+		}
+
+		span.cancel-edit, span.cancel-delete {
+			display: none;
+		}
+
+		i.fa-trash {
+			margin-left: 10px;
+		}
+
+		div.col-edit {
+			display: none;
+		}
+
+		button#btn-save-records {
+			float: right;
 		}
 	}
 }

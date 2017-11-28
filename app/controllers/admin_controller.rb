@@ -5,6 +5,7 @@ class AdminController < ApplicationController
 	TEST_SMS_MESSAGE = 'This is a test text from the MGH Neurological Clinical Research Institute!'.freeze
 	PHASE_DATES_MSG = 'Please provide a start and end date for every phase. Phases must go in order and cannot overlap.'.freeze
 	DAYS_OF_WEEK = { 'sun' => 0, 'mon' => 1, 'tue' => 2, 'wed' => 3, 'thu' => 4, 'fri' => 5, 'sat' => 6 }.freeze
+	MANAGE_PAGE_LOCKED_FIELDS = ['id', 'created_at', 'updated_at', 'password_digest'].freeze
 
 	def admin
 	end
@@ -40,29 +41,91 @@ class AdminController < ApplicationController
 		end
 	end
 
+	def manage_selection
+	end
+
+	# Fetch db records for the manage pages
 	def manage
+		model = params['model']
+		@header_record_type_plural = model.name.pluralize
+	 	columns = sort_headers(model.columns)
+		@headers = columns.map(&:name)
+		@rows = model.all.map do |record|
+			columns.map do |column|
+				{
+					value: record.send(column.name.to_sym),
+					meta: {
+						column: column.name,
+						type: column.type,
+						editable: !MANAGE_PAGE_LOCKED_FIELDS.include?(column.name)
+					}
+				}
+			end
+		end
+		render 'admin/manage_db'
+	end
+
+	# Sort headers to put certain ones at the front/back
+	def sort_headers(columns)
+		front_headers = ['id']
+		back_headers = ['created_at', 'updated_at']
+		excluded_headers = []
+
+		sorted = []
+		front = []
+		back = []
+		excluded = []
+
+		columns.each do |column|
+			if front_headers.include?(column.name)
+				front << column
+			elsif back_headers.include?(column.name)
+				back << column
+			elsif excluded_headers.include?(column.name)
+				excluded << column
+			else
+				sorted << column
+			end
+		end
+		front + sorted + back
+	end
+
+	def manage_submit
+		process_submitted_creations
+		process_submitted_updates
+		process_submitted_deletions
+	end
+
+	# Handle record creations via the manage pages
+	def process_submitted_creations
 
 	end
 
-	def manage_studies
+	# Handle record updates via the manage pages
+	def process_submitted_updates
+		return unless params['model'] && params['updates'] && !params['updates'].empty?
+		params['updates'].each do |submitted_update|
+			record_id = submitted_update['id'].to_i
+			record = params['model'].find_by_id(record_id)
+			next unless record
+			# Update the record with submitted data
+			record.update_attributes(
+				# Only accept fields which are actually on the model
+				submitted_update['updates'].to_unsafe_h.select { |key, value|
+					params['model'].column_names.include?(key)
+				}
+			)
+		end
 	end
 
-	def manage_phases
-	end
-
-	def manage_questions
-	end
-
-	def manage_users
-	end
-
-	def manage_user_schedules
-	end
-
-	def manage_user_phases
-	end
-
-	def manage_user_data
+	# Handle record deletions via the manage pages
+	def process_submitted_deletions
+		return unless params['model'] && params['deletions'] && !params['deletions'].empty?
+		params['deletions'].each do |record_id|
+			record = params['model'].find_by_id(record_id)
+			next unless record
+			record.destroy
+		end
 	end
 
 	def load_studies

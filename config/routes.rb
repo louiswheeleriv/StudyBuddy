@@ -14,14 +14,21 @@ Rails.application.routes.draw do
 	get 'admin/signup/load_study_phases', to: 'admin#load_study_phases'
 	post 'test_sms', to: 'admin#test_sms'
 	get 'admin/users', to: 'admin#users'
-	get 'admin/manage', to: 'admin#manage'
-	get 'admin/manage/studies', to: 'admin#manage_studies'
-	get 'admin/manage/phases', to: 'admin#manage_phases'
-	get 'admin/manage/questions', to: 'admin#manage_questions'
-	get 'admin/manage/users', to: 'admin#manage_users'
-	get 'admin/manage/user_schedules', to: 'admin#manage_user_schedules'
-	get 'admin/manage/user_phases', to: 'admin#manage_user_phases'
-	get 'admin/manage/user_data', to: 'admin#manage_user_data'
+	get 'admin/manage', to: 'admin#manage_selection'
+	get 'admin/manage/studies', to: 'admin#manage', model: Study
+	get 'admin/manage/phases', to: 'admin#manage', model: Phase
+	get 'admin/manage/questions', to: 'admin#manage', model: Question
+	get 'admin/manage/users', to: 'admin#manage', model: User
+	get 'admin/manage/user_schedules', to: 'admin#manage', model: UserSchedule
+	get 'admin/manage/user_phases', to: 'admin#manage', model: UserPhase
+	get 'admin/manage/user_data', to: 'admin#manage', model: UserDatum
+	post 'admin/manage/studies', to: 'admin#manage_submit', model: Study
+	post 'admin/manage/phases', to: 'admin#manage_submit', model: Phase
+	post 'admin/manage/questions', to: 'admin#manage_submit', model: Question
+	post 'admin/manage/users', to: 'admin#manage_submit', model: User
+	post 'admin/manage/user_schedules', to: 'admin#manage_submit', model: UserSchedule
+	post 'admin/manage/user_phases', to: 'admin#manage_submit', model: UserPhase
+	post 'admin/manage/user_data', to: 'admin#manage_submit', model: UserDatum
 
 	get 'study/:study_id', to: 'study#study', constraints: { study_id: /.*/ }
 end

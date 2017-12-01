@@ -41,6 +41,10 @@ class AdminController < ApplicationController
 		end
 	end
 
+	#
+	# MANAGE DB PAGES
+	#
+
 	def manage_selection
 	end
 
@@ -54,13 +58,12 @@ class AdminController < ApplicationController
 			columns.map do |column|
 				{
 					value: record.send(column.name.to_sym),
-					meta: {
-						column: column.name,
-						type: column.type,
-						editable: !MANAGE_PAGE_LOCKED_FIELDS.include?(column.name)
-					}
+					meta: db_column_meta(column)
 				}
 			end
+		end
+		@columns = columns.map do |column|
+			db_column_meta(column)
 		end
 		render 'admin/manage_db'
 	end
@@ -90,42 +93,83 @@ class AdminController < ApplicationController
 		front + sorted + back
 	end
 
+	def db_column_meta(column)
+		{
+			column: column.name,
+			type: column.type,
+			editable: !MANAGE_PAGE_LOCKED_FIELDS.include?(column.name)
+		}
+	end
+
+	# Save button clicked on manage db page
 	def manage_submit
-		process_submitted_creations
-		process_submitted_updates
-		process_submitted_deletions
+		errors = {
+			creations: process_submitted_creations,
+			updates: process_submitted_updates,
+			deletions: process_submitted_deletions
+		}
+		if errors.any? { |type, errs| !errs.empty? }
+			render status: 422, json: errors
+		else
+			render status: 200
+		end
 	end
 
 	# Handle record creations via the manage pages
 	def process_submitted_creations
-
+		errors = []
+		return errors unless params['model'] && params['creations'] && !params['creations'].empty?
+		params['creations'].each do |submitted_creation|
+			begin
+				params['model'].create!(
+					submitted_creation.to_unsafe_h.select { |key, value|
+						params['model'].column_names.include?(key)
+					}
+				)
+			rescue Exception => e
+				errors << e.message
+			end
+		end
+		errors
 	end
 
 	# Handle record updates via the manage pages
 	def process_submitted_updates
-		return unless params['model'] && params['updates'] && !params['updates'].empty?
+		errors = []
+		return errors unless params['model'] && params['updates'] && !params['updates'].empty?
 		params['updates'].each do |submitted_update|
-			record_id = submitted_update['id'].to_i
-			record = params['model'].find_by_id(record_id)
-			next unless record
-			# Update the record with submitted data
-			record.update_attributes(
-				# Only accept fields which are actually on the model
-				submitted_update['updates'].to_unsafe_h.select { |key, value|
-					params['model'].column_names.include?(key)
-				}
-			)
+			begin
+				record_id = submitted_update['id'].to_i
+				record = params['model'].find_by_id(record_id)
+				next unless record
+				# Update the record with submitted data
+				record.update_attributes(
+					# Only accept fields which are actually on the model
+					submitted_update['updates'].to_unsafe_h.select { |key, value|
+						params['model'].column_names.include?(key)
+					}
+				)
+			rescue Exception => e
+				errors << e.message
+			end
 		end
+		errors
 	end
 
 	# Handle record deletions via the manage pages
 	def process_submitted_deletions
-		return unless params['model'] && params['deletions'] && !params['deletions'].empty?
+		errors = []
+		return errors unless params['model'] && params['deletions'] && !params['deletions'].empty?
 		params['deletions'].each do |record_id|
-			record = params['model'].find_by_id(record_id)
-			next unless record
-			record.destroy
+			begin
+				record = params['model'].find_by_id(record_id)
+				next unless record
+				record.destroy
+			rescue Exception => e
+				errors << e.message
+			end
 		end
+		errors
 	end
 
 	def load_studies

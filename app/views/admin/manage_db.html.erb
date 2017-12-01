@@ -3,6 +3,7 @@
 		Back to Manage
 	</a>
 	<h2 id="page-header">Manage <%= @header_record_type_plural %></h2>
+	<div id="errors"></div>
 	<div id="records-container">
 		<table class="table table-striped">
 			<thead>
@@ -16,7 +17,7 @@
 			<tbody>
 				<% @rows.each do |row| %>
 					<% id = row.find { |c| c[:meta][:column] == 'id' }[:value] %>
-					<tr data-id="<%= id %>">
+					<tr data-id="<%= id %>" class="existing">
 						<td class="actions">
 							<i class="fa fa-pencil"></i>
 							<span class="cancel-edit">cancel</span>
@@ -52,9 +53,22 @@
 						<% end %>
 					</tr>
 				<% end %>
+
 			</tbody>
 		</table>
-		<button id="btn-save-records" class="btn btn-primary disabled">Save Changes</button>
+		<button id="btn-new-record" class="btn btn-primary" onclick="addRecordRow(); return false;">
+			<i class="fa fa-plus"></i> New Record
+		</button>
+		<button id="btn-save-records" class="btn btn-primary disabled">
+			<i class="fa fa-save"></i> Save Changes
+		</button>
 	</div>
 	<%= javascript_include_tag('admin/manage_db.js') %>
+	<script>
+		function addRecordRow() {
+			$('div#records-container tbody tr:last').after("<%= escape_javascript("#{render :partial => 'shared/db_row', :locals => {columns: @columns}}").html_safe %>");
+			numRecordsToCreate++;
+			toggleSaveButton(true);
+		}
+	</script>
 </div>

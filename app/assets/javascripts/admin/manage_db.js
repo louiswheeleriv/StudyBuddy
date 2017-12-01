@@ -1,3 +1,4 @@
+var numRecordsToCreate = 0;
 var recordIdsToUpdate = [];
 var recordIdsToDelete = [];
 
@@ -7,7 +8,6 @@ $('div#records-container tbody i.fa-pencil').on('click', function() {
 	// Show editable cells
 	row.find('div.col-read').hide();
 	row.find('div.col-edit').show();
-
 
 	// Hide action icons, show cancel button
 	$(this).hide();
@@ -34,7 +34,9 @@ $('div#records-container tbody span.cancel-edit').on('click', function() {
 	$(this).hide();
 	row.find('i.fa-pencil, i.fa-trash').show();
 	recordIdsToUpdate = removeAllInstances(recordIdsToUpdate, Number(row.attr('data-id')));
-	if (recordIdsToUpdate.length < 1 && recordIdsToDelete.length < 1) {
+	if (numRecordsToCreate < 1 &&
+		recordIdsToUpdate.length < 1 &&
+		recordIdsToDelete.length < 1) {
 		toggleSaveButton(false);
 	}
 });
@@ -68,13 +70,18 @@ $('div#records-container tbody span.cancel-delete').on('click', function() {
 	row.find('span.cancel-delete').hide();
 	row.find('i.fa-pencil, i.fa-trash').show();
 	recordIdsToDelete = removeAllInstances(recordIdsToDelete, Number(row.attr('data-id')));
-	if (recordIdsToUpdate.length < 1 && recordIdsToDelete.length < 1) {
+	if (numRecordsToCreate < 1 &&
+		recordIdsToUpdate.length < 1 &&
+		recordIdsToDelete.length < 1) {
 		toggleSaveButton(false);
 	}
 });
 
 $('button#btn-save-records').on('click', function() {
-	var confirmMessage = 'Are you sure you want to save the following changes?';
+	var confirmMessage = 'Are you sure you want to save the following changes? This cannot be undone!';
+	if (numRecordsToCreate > 0) {
+		confirmMessage += ('\n\nCreate ' + numRecordsToCreate + ' record(s)');
+	}
 	if (recordIdsToUpdate.length > 0) {
 		confirmMessage += ('\n\nUpdate ' + recordIdsToUpdate.length + ' record(s)');
 	}
@@ -93,6 +100,16 @@ function removeAllInstances(array, value) {
 	});
 }
 
+function removeRow(row) {
+	$(row).closest('tr').remove();
+	numRecordsToCreate--;
+	if (numRecordsToCreate < 1 &&
+		recordIdsToUpdate.length < 1 &&
+		recordIdsToDelete.length < 1) {
+		toggleSaveButton(false);
+	}
+}
+
 function toggleSaveButton(enabled) {
 	$('button#btn-save-records').toggleClass('disabled', !enabled);
 }
@@ -103,7 +120,7 @@ function submitChanges() {
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify({
-			creations: [],
+			creations: serializeCreations(),
 			updates: serializeUpdates(),
 			deletions: recordIdsToDelete
 		}),
@@ -116,8 +133,22 @@ function submitChanges() {
 	});
 }
 
+function serializeCreations() {
+	var rows = $('div#records-container tbody tr[data-id="-1"]');
+	return rows.toArray().map(function(row) {
+		// For each row, return a JS object including the created record's data
+		return arrayToHash($(row).find('td.editable').toArray().map(function(cell) {
+			var colName = $(cell).attr('data-col');
+			var value = $(cell).find('div.col-edit > input').val();
+			if (value != '' && value != null) {
+				return [colName, value];
+			}
+		}).removeNulls());
+	});
+}
+
 function serializeUpdates() {
-	var rows = $('div#records-container tbody tr[data-id]');
+	var rows = $('div#records-container tbody tr[data-id!="-1"]');
 	return rows.toArray().filter(function(row) {
 		// First collect all edited rows
 		return recordIdsToUpdate.includes(Number($(row).attr('data-id')));
@@ -138,8 +169,30 @@ function serializeUpdates() {
 }
 
 function renderErrors(errors) {
-	console.log('ERRORS!');
-	debugger;
+	var errHtml = '';
+	if (errors.updates.length > 0) {
+		errHtml += '<div><b>UPDATE ERRORS</b></div>';
+		errHtml += wrapInDivs(errors.updates);
+	}
+	if (errors.deletions.length > 0) {
+		errHtml += '<div><b>DELETION ERRORS</b></div>';
+		errHtml += wrapInDivs(errors.deletions);
+	}
+	if (errors.creations.length > 0) {
+		errHtml += '<div><b>CREATION ERRORS</b></div>';
+		errHtml += wrapInDivs(errors.creations);
+	}
+	$('div#errors').html(errHtml);
+}
+
+function wrapInDivs(texts) {
+	return texts.map(function(text) {
+		return ('<div>' + text + '</div>');
+	}).join('');
+}
+
+function scrollToTopOfPage() {
+	document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 // Takes array where each element is an array with two elements.

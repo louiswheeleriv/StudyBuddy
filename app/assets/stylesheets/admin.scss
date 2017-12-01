@@ -149,6 +149,11 @@ div#admin-manage-page {
 		text-align: center;
 	}
 
+	div#errors {
+		text-align: center;
+		color: red;
+	}
+
 	div#records-container {
 
 		i.fa, span.cancel-edit, span.cancel-delete {
@@ -163,6 +168,10 @@ div#admin-manage-page {
 			color: red;
 		}
 
+		tr[data-id="-1"] i.fa-times {
+			color: lightslategray;
+		}
+
 		span.cancel-edit, span.cancel-delete {
 			display: none;
 		}
@@ -171,8 +180,12 @@ div#admin-manage-page {
 			margin-left: 10px;
 		}
 
-		div.col-edit {
+		tr.existing div.col-edit {
 			display: none;
+		}
+
+		button > i.fa {
+			margin-right: 2px;
 		}
 
 		button#btn-save-records {

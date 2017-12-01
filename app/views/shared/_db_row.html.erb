@@ -1,0 +1,20 @@
+<tr data-id="-1">
+	<td class="actions">
+		<i class="fa fa-times" onclick="removeRow(this);"></i>
+	</td>
+	<% columns.each do |column| %>
+		<% if column[:editable] %>
+			<td class="editable" data-col="<%= column[:column] %>">
+				<div class="col-edit">
+					<% if column[:type] == :boolean %>
+						<input type="checkbox" />
+					<% else %>
+						<input type="<%= column[:type] %>" />
+					<% end %>
+				</div>
+			</td>
+		<% else %>
+			<td></td>
+		<% end %>
+	<% end %>
+</tr>

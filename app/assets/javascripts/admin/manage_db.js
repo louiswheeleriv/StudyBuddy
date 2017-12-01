@@ -1,6 +1,8 @@
 var numRecordsToCreate = 0;
 var recordIdsToUpdate = [];
 var recordIdsToDelete = [];
+var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+var scrollDurationMillis = 600;
 
 $('div#records-container tbody i.fa-pencil').on('click', function() {
 	var row = $(this).closest('tr');
@@ -103,11 +105,20 @@ function removeAllInstances(array, value) {
 function removeRow(row) {
 	$(row).closest('tr').remove();
 	numRecordsToCreate--;
+	recalculateRowNumbers();
 	if (numRecordsToCreate < 1 &&
 		recordIdsToUpdate.length < 1 &&
 		recordIdsToDelete.length < 1) {
 		toggleSaveButton(false);
 	}
+}
+
+function recalculateRowNumbers() {
+	$('div#records-container table tbody tr').each(function(index) {
+		var rowNum = (index + 1);
+		$(this).attr('data-row-num', rowNum);
+		$(this).find('td.row-num').html(rowNum);
+	});
 }
 
 function toggleSaveButton(enabled) {
@@ -122,13 +133,17 @@ function submitChanges() {
 		data: JSON.stringify({
 			creations: serializeCreations(),
 			updates: serializeUpdates(),
-			deletions: recordIdsToDelete
+			deletions: serializeDeletions()
 		}),
 		success: function(response) {
 			location.reload();
 		},
 		error: function(response) {
-			renderErrors(response.responseJSON);
+			if (response.status == 422) {
+				renderRowErrors(response.responseJSON);
+			} else {
+				renderInternalError(response.responseJSON.error);
+			}
 		}
 	});
 }
@@ -137,13 +152,16 @@ function serializeCreations() {
 	var rows = $('div#records-container tbody tr[data-id="-1"]');
 	return rows.toArray().map(function(row) {
 		// For each row, return a JS object including the created record's data
-		return arrayToHash($(row).find('td.editable').toArray().map(function(cell) {
-			var colName = $(cell).attr('data-col');
-			var value = $(cell).find('div.col-edit > input').val();
-			if (value != '' && value != null) {
-				return [colName, value];
-			}
-		}).removeNulls());
+		return {
+			rowNum: $(row).attr('data-row-num'),
+			data: arrayToHash($(row).find('td.editable').toArray().map(function(cell) {
+				var colName = $(cell).attr('data-col');
+				var value = $(cell).find('div.col-edit > input').val();
+				if (value != '' && value != null) {
+					return [colName, value];
+				}
+			}).removeNulls())
+		}
 	});
 }
 
@@ -155,8 +173,9 @@ function serializeUpdates() {
 	}).map(function(row) {
 		// For each row, return a JS object including the record id and updated data
 		return {
+			rowNum: $(row).attr('data-row-num'),
 			id: $(row).attr('data-id'),
-			updates: arrayToHash($(row).find('td.editable').toArray().map(function(cell) {
+			data: arrayToHash($(row).find('td.editable').toArray().map(function(cell) {
 				var oldValue = $(cell).find('div.col-read > input').val();
 				var newValue = $(cell).find('div.col-edit > input').val();
 				if (oldValue != newValue) {
@@ -168,31 +187,44 @@ function serializeUpdates() {
 	});
 }
 
-function renderErrors(errors) {
-	var errHtml = '';
-	if (errors.updates.length > 0) {
-		errHtml += '<div><b>UPDATE ERRORS</b></div>';
-		errHtml += wrapInDivs(errors.updates);
-	}
-	if (errors.deletions.length > 0) {
-		errHtml += '<div><b>DELETION ERRORS</b></div>';
-		errHtml += wrapInDivs(errors.deletions);
-	}
-	if (errors.creations.length > 0) {
-		errHtml += '<div><b>CREATION ERRORS</b></div>';
-		errHtml += wrapInDivs(errors.creations);
-	}
-	$('div#errors').html(errHtml);
+function serializeDeletions() {
+	// Return array of objects including the row numbers and ids to be deleted
+	return recordIdsToDelete.map(function(id) {
+		var rowNum = $('div#records-container tbody tr[data-id!='+id+']').attr('data-row-num');
+		return { rowNum: rowNum, id: id };
+	});
 }
 
-function wrapInDivs(texts) {
-	return texts.map(function(text) {
-		return ('<div>' + text + '</div>');
-	}).join('');
+function renderRowErrors(errors) {
+	$('div#errors').html([
+		buildErrorHTML(errors.updates, 'update'),
+		buildErrorHTML(errors.deletions, 'deletion'),
+		buildErrorHTML(errors.creations, 'creation')
+	].join(''));
+	scrollToTopOfPage();
+}
+
+function renderInternalError(error) {
+	$('div#errors').html('<div><b>SERVER ERROR</b>: '+error+'</div>')
+}
+
+// errors is an array of hashes where each hash has keys rowNum and error
+function buildErrorHTML(errors, type) {
+	if (errors.length < 1) { return ''; }
+	var header = ('<div><b>'+type.toUpperCase()+' ERRORS</b></div>');
+ 	return (header + errors.map(function(err) {
+		return ('<div><b><a onclick="scrollToRow('+err.rowNum+');" style="cursor: pointer;">Row '+err.rowNum+'</a></b>: '+err.error+'</div>');
+	}).join(''));
 }
 
 function scrollToTopOfPage() {
-	document.body.scrollTop = document.documentElement.scrollTop = 0;
+	$('html, body').animate({ scrollTop: 0 }, scrollDurationMillis);
+}
+
+function scrollToRow(rowNum) {
+	var row = $('div#records-container tbody tr[data-row-num='+rowNum+']');
+	var location = (row.offset().top - (viewportHeight / 2));
+	$('html, body').animate({ scrollTop: location }, scrollDurationMillis);
 }
 
 // Takes array where each element is an array with two elements.

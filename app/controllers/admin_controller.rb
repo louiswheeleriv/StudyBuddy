@@ -110,9 +110,9 @@ class AdminController < ApplicationController
 		}
 		if errors.any? { |type, errs| !errs.empty? }
 			render status: 422, json: errors
-		else
-			render status: 200
 		end
+	rescue Exception => e
+		render status: 500, json: { error: e.message }
 	end
 
 	# Handle record creations via the manage pages
@@ -122,12 +122,12 @@ class AdminController < ApplicationController
 		params['creations'].each do |submitted_creation|
 			begin
 				params['model'].create!(
-					submitted_creation.to_unsafe_h.select { |key, value|
+					submitted_creation['data'].to_unsafe_h.select { |key, value|
 						params['model'].column_names.include?(key)
 					}
 				)
 			rescue Exception => e
-				errors << e.message
+				errors << { rowNum: submitted_creation['rowNum'], error: e.message }
 			end
 		end
 		errors
@@ -143,14 +143,14 @@ class AdminController < ApplicationController
 				record = params['model'].find_by_id(record_id)
 				next unless record
 				# Update the record with submitted data
-				record.update_attributes(
+				record.update_attributes!(
 					# Only accept fields which are actually on the model
-					submitted_update['updates'].to_unsafe_h.select { |key, value|
+					submitted_update['data'].to_unsafe_h.select { |key, value|
 						params['model'].column_names.include?(key)
 					}
 				)
 			rescue Exception => e
-				errors << e.message
+				errors << { rowNum: submitted_update['rowNum'], error: e.message }
 			end
 		end
 		errors
@@ -160,13 +160,13 @@ class AdminController < ApplicationController
 	def process_submitted_deletions
 		errors = []
 		return errors unless params['model'] && params['deletions'] && !params['deletions'].empty?
-		params['deletions'].each do |record_id|
+		params['deletions'].each do |submitted_deletion|
 			begin
-				record = params['model'].find_by_id(record_id)
+				record = params['model'].find_by_id(submitted_deletion['id'])
 				next unless record
-				record.destroy
+				record.destroy!
 			rescue Exception => e
-				errors << e.message
+				errors << { rowNum: submitted_deletion['rowNum'], error: e.message }
 			end
 		end
 		errors

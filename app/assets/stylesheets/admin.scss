@@ -156,6 +156,10 @@ div#admin-manage-page {
 
 	div#records-container {
 
+		tbody {
+			border: solid 1px #E5E5E5;
+		}
+
 		i.fa, span.cancel-edit, span.cancel-delete {
 			cursor: pointer;
 		}

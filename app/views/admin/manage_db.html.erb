@@ -9,21 +9,25 @@
 			<thead>
 				<tr>
 					<th>Actions</th>
+					<th>Row</th>
 					<% @headers.each do |header| %>
 						<th><%= header %></th>
 					<% end %>
 				</tr>
 			</thead>
 			<tbody>
+				<% row_num = 0 %>
 				<% @rows.each do |row| %>
 					<% id = row.find { |c| c[:meta][:column] == 'id' }[:value] %>
-					<tr data-id="<%= id %>" class="existing">
+					<% row_num += 1 %>
+					<tr data-id="<%= id %>" data-row-num="<%= row_num %>" class="existing">
 						<td class="actions">
 							<i class="fa fa-pencil"></i>
 							<span class="cancel-edit">cancel</span>
 							<i class="fa fa-trash"></i>
 							<span class="cancel-delete">undo deletion</span>
 						</td>
+						<td class="row-num"><%= row_num %></td>
 						<% row.each do |cell| %>
 							<% if cell[:meta][:editable] %>
 								<td data-col="<%= cell[:meta][:column] %>" class="editable">
@@ -66,8 +70,11 @@
 	<%= javascript_include_tag('admin/manage_db.js') %>
 	<script>
 		function addRecordRow() {
-			$('div#records-container tbody tr:last').after("<%= escape_javascript("#{render :partial => 'shared/db_row', :locals => {columns: @columns}}").html_safe %>");
+			$('div#records-container tbody tr:last').after(
+				"<%= escape_javascript("#{render :partial => 'shared/db_row', :locals => { columns: @columns }}").html_safe %>"
+			);
 			numRecordsToCreate++;
+			recalculateRowNumbers();
 			toggleSaveButton(true);
 		}
 	</script>

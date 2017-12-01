@@ -2,6 +2,7 @@
 	<td class="actions">
 		<i class="fa fa-times" onclick="removeRow(this);"></i>
 	</td>
+	<td class="row-num"></td>
 	<% columns.each do |column| %>
 		<% if column[:editable] %>
 			<td class="editable" data-col="<%= column[:column] %>">

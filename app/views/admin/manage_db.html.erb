@@ -70,9 +70,7 @@
 	<%= javascript_include_tag('admin/manage_db.js') %>
 	<script>
 		function addRecordRow() {
-			$('div#records-container tbody tr:last').after(
-				"<%= escape_javascript("#{render :partial => 'shared/db_row', :locals => { columns: @columns }}").html_safe %>"
-			);
+			$("<%= escape_javascript("#{render :partial => 'shared/db_row', :locals => { columns: @columns }}").html_safe %>").appendTo('div#records-container tbody');
 			numRecordsToCreate++;
 			recalculateRowNumbers();
 			toggleSaveButton(true);

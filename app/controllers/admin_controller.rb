@@ -227,8 +227,6 @@ class AdminController < ApplicationController
 
 			user = User.create(
 				is_admin: study_id == 'admin',
-				participant_number: u['participant_number'],
-				participant_active: true,
 				first_name: u['first_name'],
 				last_name: u['last_name'],
 				username: u['email'],
@@ -254,6 +252,13 @@ class AdminController < ApplicationController
 					render status: 400, json: errors and raise ActiveRecord::Rollback
 				end
 			end
+
+			user_study = UserStudy.create(
+				user_id: user.id,
+				study_id: study_id,
+				participant_active: true,
+				participant_number: u['participant_number']
+			)
 
 			sched_valid = validate_schedule_data(s) # returns true or an error hash
 			if validate_schedule_data(s)

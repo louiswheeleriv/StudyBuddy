@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 	get 'admin/manage/phases', to: 'admin#manage', model: Phase
 	get 'admin/manage/questions', to: 'admin#manage', model: Question
 	get 'admin/manage/users', to: 'admin#manage', model: User
+	get 'admin/manage/user_studies', to: 'admin#manage', model: UserStudy
 	get 'admin/manage/user_schedules', to: 'admin#manage', model: UserSchedule
 	get 'admin/manage/user_phases', to: 'admin#manage', model: UserPhase
 	get 'admin/manage/user_data', to: 'admin#manage', model: UserDatum

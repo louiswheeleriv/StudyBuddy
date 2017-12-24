@@ -4,4 +4,37 @@
 
 #dashboard-page {
 	text-align: center;
+
+	#no-questions {
+		display: none;
+	}
+
+	#questions {
+		display: none;
+
+		.well {
+			text-align: left;
+
+			#question-count {
+				font-size: smaller;
+			}
+		}
+
+		#question-controls {
+
+			.left {
+				text-align: left;
+			}
+
+			.middle {
+				text-align: center;
+			}
+
+			.right {
+				text-align: right;
+			}
+		}
+	}
+
+
 }

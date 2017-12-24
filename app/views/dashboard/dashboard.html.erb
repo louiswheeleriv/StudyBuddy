@@ -1,6 +1,31 @@
 <div id="dashboard-page">
 	<h2>Dashboard</h2>
-	<div class="well">
+	<div id="no-questions" class="well">
 		<h4>You're caught up! No pending survey questions.</h4>
 	</div>
+	<div id="questions">
+		<div class="well">
+			<p id="question-count">
+				Question <span id="question-number"></span> of <span id="question-total"></span>
+			</p>
+			<p id="question-title"></p>
+			<div id="question-inputs">
+
+			</div>
+		</div>
+		<div id="question-controls" class="row">
+			<div class="col-xs-4 left">
+				<button id="btn-prev-question" class="btn btn-default pull-left" onclick="prevQuestion()">Prev</button>
+			</div>
+			<div class="col-xs-4 middle">
+				<button id="submit-answer" class="btn btn-primary" onclick="submitAnswer()">Submit</button>
+			</div>
+			<div class="col-xs-4 right">
+				<button id="btn-next-question" class="btn btn-default pull-right" onclick="nextQuestion()">Next</button>
+			</div>
+		</div>
+	</div>
+
+	<%= content_tag :div, class: "page-data", data: @questions do %>
+	<% end %>
 </div>

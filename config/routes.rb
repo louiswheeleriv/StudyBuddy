@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'logout',  to: 'session#destroy'
 
 	get 'dashboard', to: 'dashboard#dashboard'
+	post 'dashboard/answer', to: 'dashboard#answer'
 
 	get 'admin', to: 'admin#admin'
 	get 'admin/signup', to: 'admin#signup'

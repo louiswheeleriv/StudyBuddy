@@ -10,6 +10,7 @@ class DashboardController < ApplicationController
 			redirect_to('/admin')
 		else
 			# TODO: Also restrict to questions asked today
+			# TODO: Don't use user_datum.question.whatever here, that runs a query and we're looping!
 			@questions = UserDatum.where(
 				user_id: current_user.id,
 				answered_at: nil
@@ -38,6 +39,16 @@ class DashboardController < ApplicationController
 		else
 			{ type: question.answer_type }
 		end
+	end
+
+	def answer
+		user_datum_id = params['user_datum_id']
+		answers = params['answers']
+		user_datum = UserDatum.find(user_datum_id)
+		user_datum.update_attributes(data1: answers[0], data2: answers[1], data3: answers[2])
+		render status: 200, json: {}
+	rescue Exception => e
+		render status: 500, json: { error: e.message }
 	end
 
 end

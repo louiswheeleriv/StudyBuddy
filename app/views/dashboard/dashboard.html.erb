@@ -13,17 +13,34 @@
 
 			</div>
 		</div>
+		
+		<p id="question-error"></p>
+
 		<div id="question-controls" class="row">
 			<div class="col-xs-4 left">
 				<button id="btn-prev-question" class="btn btn-default pull-left" onclick="prevQuestion()">Prev</button>
 			</div>
 			<div class="col-xs-4 middle">
-				<button id="submit-answer" class="btn btn-primary" onclick="submitAnswer()">Submit</button>
+				<button id="submit-answer" class="btn btn-primary" data-toggle="modal" data-target="#submit-confirm-modal">Submit</button>
 			</div>
 			<div class="col-xs-4 right">
 				<button id="btn-next-question" class="btn btn-default pull-right" onclick="nextQuestion()">Next</button>
 			</div>
 		</div>
+	</div>
+
+	<div id="submit-confirm-modal" class="modal fade">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-body">
+	        <p>Are you sure?</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" onclick="submitAnswer()" data-dismiss="modal">Submit</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 
 	<%= content_tag :div, class: "page-data", data: @questions do %>

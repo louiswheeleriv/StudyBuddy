@@ -22,12 +22,6 @@ function nextQuestion() {
 	updateQuestionPanel();
 }
 
-function submitAnswer() {
-	if (confirm('Are you sure?')) {
-		console.log('submit!');
-	}
-}
-
 function updateQuestionPanel() {
 	$('#question-number').html($selectedQuestionIndex + 1);
 	$('#question-total').html($questions.length);
@@ -58,7 +52,7 @@ function buildQuestionInputsHtml() {
 			html += '<option value="'+option+'">'+option+'</option>';
 		});
 		html += '</select>';
-		return html;
+		return html + html + html;
 	}
 	debugger;
 	return 'ERROR!';
@@ -75,4 +69,42 @@ function togglePrevBtn(isEnabled) {
 
 function toggleNextBtn(isEnabled) {
 	$('#btn-next-question').toggleClass('disabled', !isEnabled);
+}
+
+function submitAnswer() {
+	$.ajax({
+		url: '/dashboard/answer',
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			user_datum_id: $questions[$selectedQuestionIndex].user_datum_id,
+			answers: serializeAnswer()
+		}),
+		success: function(response) {
+			$('#question-error').html('');
+			removeAnsweredQuestion();
+		},
+		error: function(response) {
+			$('#question-error').html(response.responseJSON.error);
+		}
+	});
+}
+
+function serializeAnswer() {
+	return $('#question-inputs .form-control').toArray().map(function(input) {
+		return $(input).val();
+	});
+}
+
+function removeAnsweredQuestion() {
+	$questions.splice($selectedQuestionIndex, 1);
+	if ($questions.length < 1) {
+		$('#questions').hide();
+		$('#no-questions').show();
+		$selectedQuestionIndex = null;
+		return;
+	} else if ($selectedQuestionIndex > ($questions.length - 1)) {
+		$selectedQuestionIndex = ($questions.length - 1);
+	}
+	updateQuestionPanel();
 }

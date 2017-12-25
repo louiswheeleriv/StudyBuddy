@@ -36,12 +36,17 @@ div#signup-page {
 		text-align: center;
 	}
 
-	div.input-daterange {
-		max-width: 400px;
+	#phase-listing {
+		text-align: center;
 
-		input[type="text"] {
-			margin: 0 !important;
-			font-size: medium;
+		div.input-daterange {
+			max-width: 400px;
+			margin: auto;
+
+			input[type="text"] {
+				margin: 0 !important;
+				font-size: medium;
+			}
 		}
 	}
 

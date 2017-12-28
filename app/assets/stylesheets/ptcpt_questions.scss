@@ -1,0 +1,46 @@
+// Place all the styles related to the Dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#ptcpt-questions-page {
+
+	#no-questions {
+		display: none;
+	}
+
+	#questions {
+		display: none;
+
+		.well {
+			text-align: left;
+
+			#question-count {
+				font-size: smaller;
+			}
+		}
+
+		#question-error {
+			color: red;
+		}
+
+		#question-controls {
+
+			.left {
+				text-align: left;
+			}
+
+			.middle {
+				text-align: center;
+			}
+
+			.right {
+				text-align: right;
+			}
+		}
+	}
+
+	.centered {
+		text-align: center;
+	}
+
+}

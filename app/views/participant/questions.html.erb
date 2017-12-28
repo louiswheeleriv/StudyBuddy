@@ -1,0 +1,56 @@
+<div id="ptcpt-questions-page">
+	<a class="btn btn-default" href="/dashboard">
+		<i class="fa fa-arrow-left"></i> Dashboard
+	</a>
+	<div class="centered">
+		<h2>Questions</h2>
+		<div id="no-questions" class="well">
+			<h4>You're caught up!</h4>
+			<h4>No pending questions.</h4>
+		</div>
+		<div id="questions">
+			<div class="well">
+				<p id="question-count">
+					Question <span id="question-number"></span> of <span id="question-total"></span>
+				</p>
+				<p id="question-title"></p>
+				<div id="question-inputs">
+
+				</div>
+			</div>
+
+			<p id="question-error"></p>
+
+			<div id="question-controls" class="row">
+				<div class="col-xs-4 left">
+					<button id="btn-prev-question" class="btn btn-default pull-left" onclick="prevQuestion()">Prev</button>
+				</div>
+				<div class="col-xs-4 middle">
+					<button id="submit-answer" class="btn btn-primary" data-toggle="modal" data-target="#submit-confirm-modal">Submit</button>
+				</div>
+				<div class="col-xs-4 right">
+					<button id="btn-next-question" class="btn btn-default pull-right" onclick="nextQuestion()">Next</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="submit-confirm-modal" class="modal fade">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		        <p>Are you sure?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-primary" onclick="submitAnswer()" data-dismiss="modal">Submit</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+
+	<%= content_tag :div, class: "page-data", data: @questions do %>
+	<% end %>
+
+	<%= javascript_include_tag('ptcpt_questions.js') %>
+</div>

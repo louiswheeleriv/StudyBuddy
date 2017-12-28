@@ -72,7 +72,7 @@ function serializeUserInfo() {
 		'email': $('#user_email').val(),
 		'password': $('#user_password').val(),
 		'password_confirmation': $('#user_password_confirmation').val(),
-		'phone': $('user_phone').val(),
+		'phone': $('#user_phone').val(),
 		'timezone': serializeTimeZoneInfo()
 	}
 }

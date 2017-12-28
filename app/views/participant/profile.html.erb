@@ -1,0 +1,23 @@
+<div id="ptcpt-profile-page">
+	<a class="btn btn-default" href="/dashboard">
+		<i class="fa fa-arrow-left"></i> Dashboard
+	</a>
+	<div class="centered">
+		<h2>Profile</h2>
+		<div class="left">
+			<%= render 'shared/user_info', locals: {
+				user: @user,
+				exclude: {
+					'participant_number' => '',
+					'password' => '',
+					'password_confirmation' => ''
+				}
+			} %>
+		</div>
+		<p id="save-error"></p>
+		<button id="btn-save" class="btn btn-primary">
+			<i class="fa fa-save"></i> Save Changes
+		</button>
+	</div>
+	<%= javascript_include_tag('ptcpt_profile.js') %>
+</div>

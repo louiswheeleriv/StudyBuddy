@@ -23,7 +23,11 @@
 			<p id="msg-user" class="err"/>
 			<%= render 'shared/user_info', locals: {
 				user: @user,
-				exclude: {},
+				exclude: {
+					'current_password' => '',
+					'new_password' => '',
+					'new_password_confirmation' => ''
+				},
 				include_phone_test: true
 			} %>
 		</div>

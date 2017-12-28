@@ -9,6 +9,10 @@ Rails.application.routes.draw do
 	get 'dashboard', to: 'dashboard#dashboard'
 	get 'questions', to: 'ptcpt_questions#questions'
 	post 'questions/answer', to: 'ptcpt_questions#answer'
+	get 'profile', to: 'ptcpt_profile#profile'
+	post 'profile/update', to: 'ptcpt_profile#update'
+	get 'contact', to: 'ptcpt_contact#contact'
+	post 'contact/message', to: 'ptcpt_contact#message'
 
 	get 'admin', to: 'admin#admin'
 	get 'admin/signup', to: 'admin#signup'

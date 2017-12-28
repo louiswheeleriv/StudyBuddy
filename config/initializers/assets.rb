@@ -12,11 +12,15 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
-Rails.application.config.assets.precompile += %w( admin/signup.js )
-Rails.application.config.assets.precompile += %w( admin/users.js )
-Rails.application.config.assets.precompile += %w( admin/manage_db.js )
-Rails.application.config.assets.precompile += %w( user_scheduler.js )
-Rails.application.config.assets.precompile += %w( user_phase_edit.js )
-Rails.application.config.assets.precompile += %w( user_info.js )
-Rails.application.config.assets.precompile += %w( dashboard.js )
-Rails.application.config.assets.precompile += %w( ptcpt_questions.js )
+Rails.application.config.assets.precompile += [
+	'admin/signup.js',
+	'admin/users.js',
+	'admin/manage_db.js',
+	'user_scheduler.js',
+	'user_phase_edit.js',
+	'user_info.js',
+	'dashboard.js',
+	'ptcpt_questions.js',
+	'ptcpt_profile.js',
+	'ptcpt_contact.js'
+]

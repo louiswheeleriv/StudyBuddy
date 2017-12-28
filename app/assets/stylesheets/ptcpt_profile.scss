@@ -1,0 +1,23 @@
+#ptcpt-profile-page {
+	margin-bottom: 50px;
+
+	input, textarea, select, .uneditable-input {
+	  border: 1px solid #bbb;
+	  width: 100%;
+	  margin-bottom: 15px;
+	}
+
+	p#pw-match {
+		color: green;
+		display: none;
+	}
+
+	p#pw-no-match, p#pw-min-length {
+		color: red;
+		display: none;
+	}
+
+	p#save-error {
+		color: red;
+	}
+}

@@ -23,3 +23,15 @@ input[data-provide="datepicker"] {
 	border-radius: 4px;
 	text-align: center;
 }
+
+.left {
+	text-align: left;
+}
+
+.centered {
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}

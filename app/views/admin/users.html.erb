@@ -1,52 +1,57 @@
 <div id="admin-users-page">
-	<h2>Users</h2>
-	<select id="select-study" class="form-control">
-		<option value="all">All Users</option>
-		<% @study_by_id.values.each do |study| %>
-			<option value="<%= study.id %>" <%= "selected" if @selected_study_id == study.id %>><%= study.name %> (<%= study.start_date %> to <%= study.end_date %>)</option>
-		<% end %>
-	</select>
-	<div id="users-container">
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Part. #</th>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Active?</th>
-				</tr>
-			</thead>
-			<tbody>
-				<% @rows.each do |row| %>
+	<a class="btn btn-default" href="/admin">
+		<i class="fa fa-arrow-left"></i> Admin Dashboard
+	</a>
+	<div class="centered">
+		<h2>Users</h2>
+		<select id="select-study" class="form-control">
+			<option value="all">All Users</option>
+			<% @study_by_id.values.each do |study| %>
+				<option value="<%= study.id %>" <%= "selected" if @selected_study_id == study.id %>><%= study.name %> (<%= study.start_date %> to <%= study.end_date %>)</option>
+			<% end %>
+		</select>
+		<div id="users-container">
+			<table class="table table-striped">
+				<thead>
 					<tr>
-						<td><%= row[:id] %></td>
-						<td>
-							<% count = 0 %>
-							<% row[:participant_numbers].map do |study_name, part_num| %>
-								<%= "#{study_name}: #{part_num}" %>
-								<% count += 1 %>
-								<% if count != row[:participant_numbers].length %>
-									<br/>
-								<% end %>
-							<% end %>
-						</td>
-						<td><%= row[:first_name] %></td>
-						<td><%= row[:last_name] %></td>
-						<td>
-							<% count = 0 %>
-							<% row[:is_active].map do |study_name, is_active| %>
-								<%= "#{study_name}: #{is_active}" %>
-								<% count += 1 %>
-								<% if count != row[:is_active].length %>
-									<br/>
-								<% end %>
-							<% end %>
-						</td>
+						<th>ID</th>
+						<th>Part. #</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Active?</th>
 					</tr>
-				<% end %>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<% @rows.each do |row| %>
+						<tr>
+							<td><%= row[:id] %></td>
+							<td>
+								<% count = 0 %>
+								<% row[:participant_numbers].map do |study_name, part_num| %>
+									<%= "#{study_name}: #{part_num}" %>
+									<% count += 1 %>
+									<% if count != row[:participant_numbers].length %>
+										<br/>
+									<% end %>
+								<% end %>
+							</td>
+							<td><%= row[:first_name] %></td>
+							<td><%= row[:last_name] %></td>
+							<td>
+								<% count = 0 %>
+								<% row[:is_active].map do |study_name, is_active| %>
+									<%= "#{study_name}: #{is_active}" %>
+									<% count += 1 %>
+									<% if count != row[:is_active].length %>
+										<br/>
+									<% end %>
+								<% end %>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<%= javascript_include_tag('admin/users.js') %>
 </div>
